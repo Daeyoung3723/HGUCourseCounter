@@ -37,7 +37,7 @@ public class HGUCoursePatternAnalyzer {
 		students = loadStudentCourseRecords(lines);
 		
 		// To sort HashMap entries by key values so that we can save the results by student ids in ascending order.
-		Map<String, Student> sortedStudents = new TreeMap<String,Student>(students); 
+		Map<String, Student> sortedStudents = new TreeMap<String,Student>(students);
 		
 		// Generate result lines to be saved.
 		ArrayList<String> linesToBeSaved = countNumberOfCoursesTakenInEachSemester(sortedStudents);
@@ -53,10 +53,46 @@ public class HGUCoursePatternAnalyzer {
 	 * @return
 	 */
 	private HashMap<String,Student> loadStudentCourseRecords(ArrayList<String> lines) {
+		HashMap<String, Student> csv = new HashMap<String, Student>();
+		String line = lines.remove(0);
+		String[] ary = line.split(",");
+		String beforeId = ary[0].trim();
+		Student student = new Student(ary[0].trim());
 		
-		// TODO: Implement this method
-		
-		return null; // do not forget to return a proper variable.
+		while(true) {
+			while(beforeId.equals(ary[0].trim())) {
+				student.addCourse(new Course(line));
+				csv.put(ary[0].trim(), student);
+				
+				if(!(lines.isEmpty())) {
+					line = lines.remove(0);
+				} else {
+					break;
+				}
+				
+				beforeId = ary[0].trim();
+				ary = line.split(",");
+			}
+			if(lines.isEmpty()) {
+				break;
+			}
+			
+			student = new Student(ary[0].trim());
+			student.addCourse(new Course(line));
+			csv.put(ary[0].trim(), student);
+			
+			if(!(lines.isEmpty())) {
+				line = lines.remove(0);
+			} else {
+				break;
+			}
+			
+			beforeId = ary[0].trim();
+			ary = line.split(",");
+			
+			
+		}
+		return csv; // do not forget to return a proper variable.
 	}
 
 	/**
@@ -66,16 +102,29 @@ public class HGUCoursePatternAnalyzer {
      * 0001,14,2,8
 	 * ....
 	 * 
-	 * 0001,14,1,9 => this means, 0001 student registered 14 semeters in total. In the first semeter (1), the student took 9 courses.
+	 * 0001,14,1,9 => this means, 0001 student registered 14 semeters in total. In the first semester (1), the student took 9 courses.
 	 * 
 	 * 
 	 * @param sortedStudents
 	 * @return
 	 */
 	private ArrayList<String> countNumberOfCoursesTakenInEachSemester(Map<String, Student> sortedStudents) {
+		ArrayList<String> lines = new ArrayList<String>();
 		
-		// TODO: Implement this method
+		for(int i = 1; i < sortedStudents.size()+1; i++) {
+			Student student = null;
+			if(i < 10) {
+				student = sortedStudents.get("000" + i);
+			} else if(i < 100) {
+				student = sortedStudents.get("00" + i);
+			} else if(i < 1000) {
+				student = sortedStudents.get("0" + i);
+			}
+			for(int k = 0; k < student.getSemestersByYearAndSemester().size(); k++) {
+				lines.add(student.getStudentld() + "," + student.getSemestersByYearAndSemester().size() + "," + (k+1) + "," + student.getNumCourseInNthSementer(k+2));
+			}
+		}
 		
-		return null; // do not forget to return a proper variable.
+		return lines; // do not forget to return a proper variable.
 	}
 }
