@@ -6,6 +6,14 @@ public class Course {
 	private String firstMajor;
 	private String secondMajor;
 	private String courseCode;
+	public String getCourseCode() {
+		return courseCode;
+	}
+
+	public String getCourseName() {
+		return courseName;
+	}
+
 	private String courseName;
 	private String courseCredit;
 

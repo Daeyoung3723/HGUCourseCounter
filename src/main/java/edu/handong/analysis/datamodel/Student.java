@@ -10,6 +10,10 @@ public class Student {
 	}
 
 	private ArrayList<Course> coursesTaken = new ArrayList<Course>(); // List of courses student has taken
+	public ArrayList<Course> getCoursesTaken() {
+		return coursesTaken;
+	}
+
 	private HashMap<String, Integer> semestersByYearAndSemester = new HashMap<String, Integer>();
 											// key: Year-Semester
 											// e.g., 2003-1
@@ -53,6 +57,7 @@ public class Student {
 		
 		return count;
 	}
+
 
 
 }
